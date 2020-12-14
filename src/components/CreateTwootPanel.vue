@@ -2,18 +2,16 @@
   <form
     class="user-profile__create-twoot"
     @submit.prevent="createNewTwoot"
-    :class="{ '--exceeded': state.newTwootCharacterCount > 180 }"
+    :class="{ '--exceeded': newTwootCharacterCount > 180 }"
   >
     <label for="newTwoot"
-      ><strong>New Twoot</strong>
-
-      ({{ newTwootCharacterCount }}/180)</label
+      ><strong>New Twoot</strong> ({{ newTwootCharacterCount }}/180)</label
     >
     <textarea
       id="newTwoot"
       cols="30"
       rows="4"
-      v-model="newTwootContent"
+      v-model="state.newTwootContent"
     ></textarea>
     <div class="user-profile__create-twoot-type">
       <label for="newTwootType"><strong>Type:</strong></label>
@@ -49,13 +47,14 @@
       });
 
       const newTwootCharacterCount = computed(() => {
-        state.newTwootContent.length;
+        console.log(state.newTwootContent.length);
+        return state.newTwootContent.length;
       });
 
       function createNewTwoot() {
         console.log("createNewTwoot");
         if (state.newTwootContent && state.selectedTwootType !== "draft") {
-          ctx.$emit("add-twoot", state.newTwootContent);
+          ctx.emit("add-twoot", state.newTwootContent);
           state.newTwootContent = "";
         }
       }
@@ -98,16 +97,13 @@
     padding: 20px 0;
     display: flex;
     flex-direction: column;
-
     textarea {
       border: 1px solid #dfe3e8;
       border-radius: 5px;
     }
-
     .create-twoot-panel__submit {
       display: flex;
       justify-content: space-between;
-
       .create-twoot-type {
         padding: 10px 0;
       }
@@ -119,6 +115,16 @@
         background-color: deeppink;
         color: white;
         font-weight: bold;
+      }
+    }
+    &.--exceeded {
+      color: red;
+      border-color: red;
+      .create-twoot-panel__submit {
+        button {
+          background-color: red;
+          color: white;
+        }
       }
     }
   }

@@ -54,12 +54,12 @@
         },
       });
 
-      function addTwoot() {
+      function addTwoot(newTwootContent) {
         console.log("addTwoot");
         state.user.twoots.unshift({
           id: state.user.twoots.length + 1,
           // id: Date.now(),
-          content: state.newTwootContent,
+          content: newTwootContent,
         });
       }
       return {
