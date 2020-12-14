@@ -32,10 +32,6 @@
         this.$emit("deleteTwoot", id);
       },
     },
-    // mounted: function() {
-    //   console.log(this.username);
-    //   console.log(this.twoot);
-    // },
   };
 </script>
 
