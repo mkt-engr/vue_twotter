@@ -1,56 +1,25 @@
 <template>
   <div class="user-profile">
     <div class="user-profile__user-panel">
-      <h1 class="user-profile__username">@{{ user.username }}</h1>
-      <div class="user-profile__admin-badge" v-if="user.isAdmin">Admin</div>
-      <div class="user-profile__admin-badge" v-else-if="!user.isAdmin">
+      <h1 class="user-profile__username">@{{ state.user.username }}</h1>
+      <div class="user-profile__admin-badge" v-if="state.user.isAdmin">
+        Admin
+      </div>
+      <div class="user-profile__admin-badge" v-else-if="!state.user.isAdmin">
         Not Admin
       </div>
       <div class="user-profile__folower-count">
-        <strong>Followers:</strong>{{ followers }}
+        <strong>Followers:</strong>{{ state.followers }}
       </div>
-      <form
-        class="user-profile__create-twoot"
-        @submit.prevent="createNewTwoot"
-        :class="{ '--exceeded': newTwootCharacterCount > 180 }"
-      >
-        <label for="newTwoot"
-          ><strong>New Twoot</strong>
-
-          ({{ newTwootCharacterCount }}/180)</label
-        >
-        <textarea
-          id="newTwoot"
-          cols="30"
-          rows="4"
-          v-model="newTwootContent"
-        ></textarea>
-        <div class="user-profile__create-twoot-type">
-          <label for="newTwootType"><strong>Type:</strong></label>
-
-          <select name="" id="newTwootType" v-model="selectedTwootType">
-            <option
-              :value="option.value"
-              v-for="(option, index) in twootTypes"
-              :key="index"
-            >
-              {{ option.name }}
-            </option>
-          </select>
-        </div>
-        <button>
-          Twoot!
-        </button>
-      </form>
     </div>
-
+    <CreateTwootPanel @add-twoot="addTwoot" />
     <!-- カスタムイベント「favouriteMorimori」 -->
     <div class="user-profilte__twoots-wrapper">
       <TwootItem
-        v-for="twoot in user.twoots"
+        v-for="twoot in state.user.twoots"
         :key="twoot.id"
         :twoot="twoot"
-        :username="user.username"
+        :username="state.user.username"
         @favouriteMorimori="toggleFavourite"
         @deleteTwoot="deleteTwoot"
       />
@@ -60,50 +29,50 @@
 
 <script>
   import TwootItem from "./TwootItem";
-
+  import CreateTwootPanel from "./CreateTwootPanel";
+  import { reactive } from "vue";
   export default {
     name: "UserProfile",
-    components: { TwootItem },
-    data() {
-      return {
-        newTwootContent: "",
-        selectedTwootType: "instant",
-        twootTypes: [
-          { value: "draft", name: "Draft" },
-          { value: "instant", name: "Instant Twoot" },
-        ],
-        isLoading: false,
+    components: { TwootItem, CreateTwootPanel },
+    setup() {
+      const state = reactive({
         followers: 0,
         user: {
           id: 1,
-          username: "_MithcellRomney",
+          username: "_MitchellRomney",
           firstName: "Mitchell",
-          lastName: "Rooney",
-          email: "mitchellromney@theearchthissquire.com",
+          lastName: "Romney",
+          email: "mitchellromney@theearthissquare.com",
           isAdmin: true,
           twoots: [
-            { id: 1, content: "Twotter is Amazing!" },
+            { id: 1, content: "Twotter is Amazing" },
             {
               id: 2,
-              content: "Don't forget to subscriber to The Earth is Square!",
+              content: "Don't forget to subscriber to The Earth is Square",
             },
           ],
         },
+      });
+
+      function addTwoot() {
+        console.log("addTwoot");
+        state.user.twoots.unshift({
+          id: state.user.twoots.length + 1,
+          // id: Date.now(),
+          content: state.newTwootContent,
+        });
+      }
+      return {
+        state,
+        addTwoot,
       };
     },
+
     watch: {
       followers(newFollowerCount, oldFollowerCount) {
         if (oldFollowerCount < newFollowerCount) {
           console.log(`${this.user.username} has gained a followers`);
         }
-      },
-    },
-    computed: {
-      fullName() {
-        return `${this.user.firstName} ${this.user.lastName}`;
-      },
-      newTwootCharacterCount() {
-        return this.newTwootContent.length;
       },
     },
     methods: {
@@ -118,17 +87,7 @@
         console.log(temp);
         console.log(`Favourited Tweeet #${id}`);
       },
-      createNewTwoot() {
-        console.log("createNewTwoot");
-        if (this.newTwootContent && this.selectedTwootType !== "draft") {
-          this.user.twoots.unshift({
-            // id: this.user.twoots.length + 1,
-            id: Date.now(),
-            content: this.newTwootContent,
-          });
-          this.newTwootContent = "";
-        }
-      },
+
       deleteTwoot(id) {
         console.log("deleteTwoot", { id });
         this.user.twoots = this.user.twoots.reduce((acc, value) => {

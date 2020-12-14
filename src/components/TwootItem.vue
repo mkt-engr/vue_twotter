@@ -1,13 +1,13 @@
 <template>
-  <div class="twoot-item" @click="favouriteTwoot(twoot.id)">
+  <!-- <div class="twoot-item" @click="favouriteTwoot(twoot.id)"> -->
+  <div class="twoot-item">
     <div class="user-profile__twoot">
       <div class="twoot-item__user">@{{ username }}</div>
     </div>
     <div class="twoot-item__Content">
       {{ twoot.content }}
-      id:{{ twoot.id }}
     </div>
-    <button @click.stop="deleteTwootMethod(twoot.id)">Delete</button>
+    <!-- <button @click.stop="deleteTwootMethod(twoot.id)">Delete</button> -->
   </div>
 </template>
 
@@ -24,14 +24,14 @@
         required: true,
       },
     },
-    methods: {
-      favouriteTwoot(id) {
-        this.$emit("favouriteMorimori", id, "aaa", { a: 1 }); //親で受け取る名前,親に渡したい変数
-      },
-      deleteTwootMethod(id) {
-        this.$emit("deleteTwoot", id);
-      },
-    },
+    // methods: {
+    //   favouriteTwoot(id) {
+    //     this.$emit("favouriteMorimori", id, "aaa", { a: 1 }); //親で受け取る名前,親に渡したい変数
+    //   },
+    //   deleteTwootMethod(id) {
+    //     this.$emit("deleteTwoot", id);
+    //   },
+    // },
   };
 </script>
 
