@@ -12,7 +12,7 @@
         <strong>Followers:</strong>{{ state.followers }}
       </div>
     </div>
-    <CreateTwootPanel @add-twoot="addTwoot" />
+
     <!-- カスタムイベント「favouriteMorimori」 -->
     <div class="user-profilte__twoots-wrapper">
       <TwootItem
@@ -24,6 +24,7 @@
         @deleteTwoot="deleteTwoot"
       />
     </div>
+    <CreateTwootPanel @add-twoot="addTwoot" />
   </div>
 </template>
 
@@ -106,6 +107,7 @@
   .user-profile {
     display: grid;
     grid-template-columns: 1fr 3fr;
+    gap: 50px;
     /* width: 100%; */
     padding: 50px 5%;
 
